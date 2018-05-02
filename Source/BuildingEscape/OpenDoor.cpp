@@ -16,9 +16,6 @@ UOpenDoor::UOpenDoor()
 void UOpenDoor::BeginPlay()
 {
 	Super::BeginPlay();
-
-	player = GetWorld()->GetFirstPlayerController()->GetPawn();
-
 	
 }
 
@@ -30,17 +27,31 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 
 	if (PressurePlate != nullptr)
 	{
-		if (PressurePlate->IsOverlappingActor(player) && this->doorState == DoorState::Close)
+		if (this->GetMass() > 30.f)
 		{
 			OpenDoor();
-			doorState = DoorState::Open;
 		}
-		if (!PressurePlate->IsOverlappingActor(player) && this->doorState == DoorState::Open)
+		else
 		{
 			CloseDoor();
-			doorState = DoorState::Close;
 		}
 	}
+}
+
+float UOpenDoor::GetMass()
+{
+	float TotalMass = 0.f;
+	TArray<AActor*> Array;
+
+	PressurePlate->GetOverlappingActors(OUT Array);
+
+	for (const auto& Actor : Array)
+	{
+		TotalMass += Actor->FindComponentByClass<UPrimitiveComponent>()->GetMass();
+		//UE_LOG(LogTemp, Warning, TEXT("%s mass: %f"), *Actor->GetName(), Actor->FindComponentByClass<UPrimitiveComponent>()->GetMass());
+	}
+
+	return TotalMass;
 }
 
 void UOpenDoor::OpenDoor()

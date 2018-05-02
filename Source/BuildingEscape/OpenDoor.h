@@ -16,11 +16,6 @@ public:
 	// Sets default values for this component's properties
 	UOpenDoor();
 
-	enum class DoorState {
-		Open,
-		Close
-	};
-
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -31,6 +26,8 @@ public:
 
 	void OpenDoor();
 	void CloseDoor();
+	
+	float GetMass();
 		
 private:
 	UPROPERTY(EditAnywhere)
@@ -38,10 +35,4 @@ private:
 
 	UPROPERTY(EditAnywhere)
 		ATriggerVolume* PressurePlate;
-
-	UPROPERTY(VisibleAnywhere)
-		AActor* player;
-
-
-	DoorState doorState = DoorState::Close;
 };
