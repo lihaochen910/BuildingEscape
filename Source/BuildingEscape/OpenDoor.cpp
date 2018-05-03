@@ -17,6 +17,7 @@ void UOpenDoor::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	//GetWorld()->GetTimerManager()
 }
 
 
@@ -56,18 +57,22 @@ float UOpenDoor::GetMass()
 
 void UOpenDoor::OpenDoor()
 {
-	AActor* Owner = GetOwner();
+	/*AActor* Owner = GetOwner();
 
 	FRotator NewRotation = FRotator(0, OpenAngle, 0);
 
-	Owner->SetActorRotation(NewRotation);
+	Owner->SetActorRotation(NewRotation);*/
+
+	OnOpenRequest.Broadcast();
 }
 
 void UOpenDoor::CloseDoor()
 {
-	AActor* Owner = GetOwner();
+	/*AActor* Owner = GetOwner();
 
 	FRotator NewRotation = FRotator(0, -180, 0);
 
-	Owner->SetActorRotation(NewRotation);
+	Owner->SetActorRotation(NewRotation);*/
+
+	OnCloseRequest.Broadcast();
 }
