@@ -28,13 +28,14 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 
 	if (PressurePlate != nullptr)
 	{
-		if (this->GetMass() > 30.f)
+		if (this->GetMass() >= TriggerMass /*&& GetWorld()->GetTimeSeconds() - LastOpenDoorTime > OpenDoorDelay*/)
 		{
-			OpenDoor();
+			OnOpen.Broadcast();
+			LastOpenDoorTime = GetWorld()->GetTimeSeconds();
 		}
 		else
 		{
-			CloseDoor();
+			OnClose.Broadcast();
 		}
 	}
 }
@@ -52,27 +53,6 @@ float UOpenDoor::GetMass()
 		//UE_LOG(LogTemp, Warning, TEXT("%s mass: %f"), *Actor->GetName(), Actor->FindComponentByClass<UPrimitiveComponent>()->GetMass());
 	}
 
+	//UE_LOG(LogTemp, Warning, TEXT("mass: %f"), TotalMass);
 	return TotalMass;
-}
-
-void UOpenDoor::OpenDoor()
-{
-	/*AActor* Owner = GetOwner();
-
-	FRotator NewRotation = FRotator(0, OpenAngle, 0);
-
-	Owner->SetActorRotation(NewRotation);*/
-
-	OnOpenRequest.Broadcast();
-}
-
-void UOpenDoor::CloseDoor()
-{
-	/*AActor* Owner = GetOwner();
-
-	FRotator NewRotation = FRotator(0, -180, 0);
-
-	Owner->SetActorRotation(NewRotation);*/
-
-	OnCloseRequest.Broadcast();
 }
